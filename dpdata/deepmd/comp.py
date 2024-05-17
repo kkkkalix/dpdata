@@ -44,15 +44,15 @@ def to_system_data(folder, type_map=None, labels=True):
     for ii in sets:
         cells, coords, eners, forces, virs = _load_set(ii, data.get("nopbc", False))
         nframes = np.reshape(cells, [-1, 3, 3]).shape[0]
-        all_cells.append(np.reshape(cells, [nframes, 3, 3]))
+        all_cells.append(np.reshape(cells, [nframes, natoms, 4]))
         all_coords.append(np.reshape(coords, [nframes, -1, 3]))
         if eners is not None:
             eners = np.reshape(eners, [nframes])
         if labels:
             if eners is not None and eners.size > 0:
-                all_eners.append(np.reshape(eners, [nframes]))
+                all_eners.append(np.reshape(eners, [nframes,1]))
             if forces is not None and forces.size > 0:
-                all_forces.append(np.reshape(forces, [nframes, -1, 3]))
+                all_forces.append(np.reshape(forces, [nframes, natoms, 3]))
             if virs is not None and virs.size > 0:
                 all_virs.append(np.reshape(virs, [nframes, 3, 3]))
     data["cells"] = np.concatenate(all_cells, axis=0)
